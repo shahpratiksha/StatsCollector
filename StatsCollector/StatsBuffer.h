@@ -7,8 +7,6 @@
 #ifndef StatsBuffer_h
 #define StatsBuffer_h
 
-#include <stdio.h>
-#include <time.h>
 #include <string>
 #define DEBUG_LOGGING 0
 
@@ -33,6 +31,7 @@ enum stat {
  * 2) make update/insert more generic
  * 3) */
 
+//Circular buffer used to store the last 60 minutes of aggregate data
 class StatsBuffer {
 
 public:

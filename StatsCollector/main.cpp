@@ -4,11 +4,11 @@
 //  Copyright © 2017 pshah. All rights reserved.
 //
 
-#include <iostream>
+
 #include <fstream>
-#include <stdio.h>
 #include "StatsProcessor.h"
 #include "StatsBuffer.h"
+#include <signal.h>
 
 using namespace std;
 

@@ -11,9 +11,8 @@
 
 #include <fstream>
 #include <iostream>
-#include <signal.h>
 #include "StatsBuffer.h"
-#include <unistd.h>
+
 
 
 using namespace std;
@@ -29,7 +28,7 @@ protected:
     StatsBuffer *results; // does not own
 };
 
-// getline gets a record -> InputProcessor processes record 
+
 class FileInputProcessor :public InputProcessor{
     
 public:

@@ -2,15 +2,13 @@
 //  StatsProcessor.cpp
 //  Created by splunker on 10/25/17.
 //  Copyright © 2017 pshah. All rights reserved.
-//StreamProcessor
 
-#include <stdio.h>
+
+
 #include "StatsProcessor.h"
-#include <iostream>
-#include <signal.h>
-#include <unistd.h>
 #include <thread>         // std::this_thread::sleep_for
 #include <chrono>
+
 #define DEBUG_LOGGING 0
 
 using namespace std;
