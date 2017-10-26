@@ -34,7 +34,7 @@ enum stat {
  * 3) */
 
 class StatsBuffer {
-    //TODO: change to constructor taking 60,4 
+
 public:
     int update(int pos, time_t timestamp, float latency);
     int reset (int pos);

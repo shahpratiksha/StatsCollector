@@ -51,6 +51,8 @@ long long int FileInputProcessor::getSizeAndSeek(ifstream& f, string path, long 
 void FileInputProcessor::processData(const string& logFile) {
     ifstream f;
     string line;
+    time_t ts;
+    float ms, latency;
     long long int length = getSizeAndSeek(f,logFile,0);
     
     if (!f.is_open())
@@ -60,8 +62,14 @@ void FileInputProcessor::processData(const string& logFile) {
     
     while(1) {
         getline(f, line);
-        if (!f.eof())
-            processRecord(line);
+        f >> ts >> ms >> latency;
+        if (!f.eof()){
+            if(DEBUG_LOGGING == 1)
+                cout << ": Parsed out timestamp:" << ts << "  and latency:" << latency
+                << " Inserting into the circular array!" << "\n";
+            //TODO: add read/write lock
+            results->insert(ts,latency);
+        }
         else {
             f.clear();
             if (DEBUG_LOGGING == 1) cout << "Clearing eof flag" << "\n";
@@ -76,14 +84,6 @@ void FileInputProcessor::processData(const string& logFile) {
 }
 
 bool FileInputProcessor::processRecord(const string& line){
-    time_t ts;
-    float ms, latency;
-    //ts >> ms >> latency;
-    //TODO: error checking
-    if(DEBUG_LOGGING == 1)
-        cout << ": Parsed out timestamp:" << ts << "  and latency:" << latency
-        << " Inserting into the circular array!" << "\n";
-        //TODO: add read/write lock
-    results->insert(ts,latency);
+   
     return true;
 }
