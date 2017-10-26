@@ -7,13 +7,13 @@
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
-#include "StatsCollector.h"
-#include "CircularArr.h"
+#include "StatsProcessor.h"
+#include "StatsBuffer.h"
 
 using namespace std;
 
 //had to be declared as global for sigint :(
-CircularArr results;
+StatsBuffer results;
 
 void my_handler(int s){
     printf("Caught signal %d\n",s);
@@ -43,8 +43,8 @@ int main(int argc, const char * argv[]) {
     
     logFile = argv[1];
     registerInterrupt();
-    FileInputStream* fis = new FileInputStream(logFile, &results);
-    fis->streamingHandler(logFile);
+    FileInputProcessor* fis = new FileInputProcessor(logFile, &results);
+    fis->processData(logFile);
     
     return 0;
 }

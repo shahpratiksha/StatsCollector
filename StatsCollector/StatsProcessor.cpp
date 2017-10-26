@@ -1,11 +1,11 @@
 //
-//  StatsCollector.cpp
+//  StatsProcessor.cpp
 //  Created by splunker on 10/25/17.
 //  Copyright © 2017 pshah. All rights reserved.
 //StreamProcessor
 
 #include <stdio.h>
-#include "StatsCollector.h"
+#include "StatsProcessor.h"
 #include <iostream>
 #include <signal.h>
 #include <unistd.h>
@@ -16,7 +16,7 @@
 using namespace std;
 
 /*check the status of the last getline()*/
-int FileInputStream::check_error_bits(ifstream* f) {
+int FileInputProcessor::check_error_bits(ifstream* f) {
     int retval = 3;
     if (f->eof()) {
         perror("stream eofbit. error state");
@@ -33,7 +33,7 @@ int FileInputStream::check_error_bits(ifstream* f) {
     return retval;
 }
 
-long long int FileInputStream::getSizeAndSeek(ifstream& f, string path, long long int offset) {
+long long int FileInputProcessor::getSizeAndSeek(ifstream& f, string path, long long int offset) {
     f.open(path);
     f.seekg(0,f.beg);
     f.seekg (0, f.end);
@@ -48,11 +48,8 @@ long long int FileInputStream::getSizeAndSeek(ifstream& f, string path, long lon
  * open and close the file multiple times, if the input stream is paused for
  * some reason. But, for a reasonable steady stream of incoming data,
  * works fine */
-void FileInputStream::streamingHandler(string& logFile) {
+void FileInputProcessor::processData(const string& logFile) {
     ifstream f;
-    time_t ts;
-    float ms, latency;
-
     string line;
     long long int length = getSizeAndSeek(f,logFile,0);
     
@@ -62,17 +59,9 @@ void FileInputStream::streamingHandler(string& logFile) {
         if (DEBUG_LOGGING == 1) cout << "is_open() returned true." << endl;
     
     while(1) {
-        //TODO read line + validate
         getline(f, line);
-        f >> ts >> ms >> latency;
-        //TODO: error checking
-        if(DEBUG_LOGGING == 1) cout << ": Parsed out timestamp:" << ts << "  and latency:" << latency << "\n";
-        //TODO split out into process record
-        if (!f.eof()){
-            if (DEBUG_LOGGING == 1) cout << " Inserting into the circular array!" << "\n";
-            //TODO: add read/write lock
-            results->insert(ts,latency);
-        }
+        if (!f.eof())
+            processRecord(line);
         else {
             f.clear();
             if (DEBUG_LOGGING == 1) cout << "Clearing eof flag" << "\n";
@@ -84,4 +73,17 @@ void FileInputStream::streamingHandler(string& logFile) {
             this_thread::sleep_for(chrono::seconds(2));
         }
     }
+}
+
+bool FileInputProcessor::processRecord(const string& line){
+    time_t ts;
+    float ms, latency;
+    //ts >> ms >> latency;
+    //TODO: error checking
+    if(DEBUG_LOGGING == 1)
+        cout << ": Parsed out timestamp:" << ts << "  and latency:" << latency
+        << " Inserting into the circular array!" << "\n";
+        //TODO: add read/write lock
+    results->insert(ts,latency);
+    return true;
 }

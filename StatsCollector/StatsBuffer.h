@@ -1,11 +1,11 @@
 //
-//  CircularArr.h
+//  StatsBuffer.h
 //  Created by pshah on 10/23/17.
 //  Copyright © 2017 pshah. All rights reserved.
 //
 
-#ifndef CircularArr_h
-#define CircularArr_h
+#ifndef StatsBuffer_h
+#define StatsBuffer_h
 
 #include <stdio.h>
 #include <time.h>
@@ -30,13 +30,12 @@ enum stat {
 
 /* TODO: make this reusable:
  * 1) templatize float
- * 2) make update/insert more generic */
-//TODO: ResultsArr or statsstructure
-class CircularArr {
+ * 2) make update/insert more generic
+ * 3) */
+
+class StatsBuffer {
     //TODO: change to constructor taking 60,4 
 public:
-    CircularArr(): head(0), tail(-1), size(0), earliestTimestampForCurrentSlot(0) {}
-    
     int update(int pos, time_t timestamp, float latency);
     int reset (int pos);
     void insert(time_t timestamp, float latency);
@@ -44,12 +43,10 @@ public:
     void printContentsInReverse();
 
 private:
-    int head;
-    int tail;
-    int size;
-    float elements [NUM_MINUTES][NUM_STATS]; // min, max, avg, count, in that order
-    time_t earliestTimestampForCurrentSlot;
+    int head=0, tail=-1, size=0;
+    float elements[NUM_MINUTES][NUM_STATS]; // min, max, avg, count, in that order
+    time_t earliestTimestampForCurrentSlot=0;
 };
 
 
-#endif /* CircularArr_h */
+#endif /* StatsBuffer_h */
