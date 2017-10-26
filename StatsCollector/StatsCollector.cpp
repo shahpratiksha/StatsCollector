@@ -2,7 +2,7 @@
 //  StatsCollector.cpp
 //  Created by splunker on 10/25/17.
 //  Copyright © 2017 pshah. All rights reserved.
-//
+//StreamProcessor
 
 #include <stdio.h>
 #include "StatsCollector.h"
@@ -52,7 +52,7 @@ void FileInputStream::streamingHandler(string& logFile) {
     ifstream f;
     time_t ts;
     float ms, latency;
-    int linecount=1;
+
     string line;
     long long int length = getSizeAndSeek(f,logFile,0);
     
@@ -62,15 +62,16 @@ void FileInputStream::streamingHandler(string& logFile) {
         if (DEBUG_LOGGING == 1) cout << "is_open() returned true." << endl;
     
     while(1) {
+        //TODO read line + validate
         getline(f, line);
         f >> ts >> ms >> latency;
+        //TODO: error checking
         if(DEBUG_LOGGING == 1) cout << ": Parsed out timestamp:" << ts << "  and latency:" << latency << "\n";
-        
+        //TODO split out into process record
         if (!f.eof()){
             if (DEBUG_LOGGING == 1) cout << " Inserting into the circular array!" << "\n";
             //TODO: add read/write lock
             results->insert(ts,latency);
-            linecount++;
         }
         else {
             f.clear();

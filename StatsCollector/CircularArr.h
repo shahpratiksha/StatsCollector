@@ -14,6 +14,8 @@
 
 using namespace std;
 
+//TODO: implement locking
+
 /* Remember to update corresponding stat enum when you add a new statistic */
 #define NUM_STATS 4 // min, max, avg, count
 #define NUM_MINUTES  60
@@ -29,8 +31,9 @@ enum stat {
 /* TODO: make this reusable:
  * 1) templatize float
  * 2) make update/insert more generic */
-
+//TODO: ResultsArr or statsstructure
 class CircularArr {
+    //TODO: change to constructor taking 60,4 
 public:
     CircularArr(): head(0), tail(-1), size(0), earliestTimestampForCurrentSlot(0) {}
     
