@@ -62,12 +62,12 @@ void FileInputProcessor::processData(const string& logFile) {
     
     while(1) {
         getline(f, line);
+        //Caution: We're assuming sane input. No validation done here
         f >> ts >> ms >> latency;
         if (!f.eof()){
             if(DEBUG_LOGGING == 1)
-                cout << ": Parsed out timestamp:" << ts << "  and latency:" << latency
-                << " Inserting into the circular array!" << "\n";
-            //TODO: add read/write lock
+                cout << "Parsed timestamp:" << ts << ", latency:" << latency
+                << ". Inserting into the circular array" << "\n";
             results->insert(ts,latency);
         }
         else {
@@ -81,9 +81,4 @@ void FileInputProcessor::processData(const string& logFile) {
             this_thread::sleep_for(chrono::seconds(2));
         }
     }
-}
-
-bool FileInputProcessor::processRecord(const string& line){
-   
-    return true;
 }

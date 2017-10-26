@@ -18,22 +18,20 @@
 
 using namespace std;
 
-//TODO: can you use a factory ? for polling based model
-
 class InputProcessor{
 
 public:
     InputProcessor(StatsBuffer *_res): results(_res) {}
     void flushResults() { return results->printContentsInReverse(); }
 
-protected : // this validates the data and inserts
+protected:
     virtual void processData(const string& filename)=0;
-    //require implementor to implement read method
     StatsBuffer *results; // does not own
 };
 
 // getline gets a record -> InputProcessor processes record 
 class FileInputProcessor :public InputProcessor{
+    
 public:
     FileInputProcessor(string _filename, StatsBuffer* _results):InputProcessor(_results) {
         filename = _filename;
@@ -42,7 +40,7 @@ public:
     int check_error_bits(ifstream *f);
     long long int getSizeAndSeek(ifstream& f, string path, long long int offset);
     void processData(const string& logFile);
-    bool processRecord(const string& line);
+    
 private:
     ifstream f;
     string filename;
