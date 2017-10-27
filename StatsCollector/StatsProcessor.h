@@ -22,9 +22,9 @@ class InputProcessor{
 public:
     InputProcessor(StatsBuffer *_res): results(_res) {}
     void flushResults() { return results->printContentsInReverse(); }
-
-protected:
     virtual void processData(const string& filename)=0;
+    
+protected:
     StatsBuffer *results; // does not own
 };
 
